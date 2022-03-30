@@ -1,25 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { useAuth } from './AuthContext'
+import Loading from './components/Loading'
+
+const AuthenticatedScreen = React.lazy(() =>
+	import('./screens/AuthenticatedScreen')
+)
+const UnauthenticatedScreen = React.lazy(() =>
+	import('./screens/UnauthenticatedScreen')
+)
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const { currentUser } = useAuth()
+
+	return (
+		<React.Suspense fallback={<Loading />}>
+			{currentUser ? <AuthenticatedScreen /> : <UnauthenticatedScreen />}
+		</React.Suspense>
+	)
 }
 
-export default App;
+export default App
